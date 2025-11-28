@@ -16,7 +16,15 @@ def get_driver():
     chrome_options.add_argument('--disable-dev-shm-usage')
     chrome_options.add_argument('--disable-gpu')
     
-    driver = webdriver.Chrome(options=chrome_options)
+    # Try to use system chromium/chromedriver
+    chrome_options.binary_location = '/nix/store/*/bin/chromium'
+    
+    try:
+        driver = webdriver.Chrome(options=chrome_options)
+    except:
+        # Fallback to default Chrome
+        driver = webdriver.Chrome(options=chrome_options)
+    
     return driver
 
 def fetch_quiz_page(url):
